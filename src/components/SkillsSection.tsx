@@ -15,7 +15,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center justify-center w-full min-h-screen pt-12 sm:pt-16 md:pt-20 pb-28 sm:pb-36 md:pb-44 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10 bg-transparent"
+      className="relative flex flex-col items-center justify-center w-full min-h-screen pt-4 sm:pt-8 md:pt-12 pb-24 sm:pb-32 md:pb-36 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10 bg-transparent"
       aria-label="Skills and Technology Constellation"
     >
       {/* 
@@ -25,11 +25,11 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
         while the purple atmosphere gently emerges before the Skills heading.
       */}
       <div
-        className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[380px] pointer-events-none -z-10"
+        className="absolute -top-20 sm:-top-28 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[340px] pointer-events-none -z-10"
         style={{
           background:
-            'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(112, 66, 248, 0.11) 0%, rgba(79, 70, 229, 0.04) 45%, transparent 75%)',
-          filter: 'blur(100px)',
+            'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(112, 66, 248, 0.08) 0%, rgba(79, 70, 229, 0.02) 45%, transparent 75%)',
+          filter: 'blur(90px)',
         }}
         aria-hidden="true"
       />
@@ -37,9 +37,18 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
       {/* 
         LAYER 2: Central Purple Nebula Video Background
         Centered, looping, muted, playsInline, autoPlay at ~0.35 opacity.
-        NO heavy black masks or opaque cards blocking it!
+        Feathered vertically using CSS mask-image so top and bottom edges dissolve
+        naturally into the deep space background without any rectangular boundaries.
       */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none -z-10 flex items-center justify-center overflow-hidden">
+      <div
+        className="absolute inset-0 w-full h-full pointer-events-none -z-10 flex items-center justify-center overflow-hidden"
+        style={{
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 12%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.7) 88%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 12%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.7) 88%, transparent 100%)',
+        }}
+      >
         <video
           className="w-full h-auto min-h-full min-w-full object-cover opacity-35 pointer-events-none select-none"
           preload="auto"

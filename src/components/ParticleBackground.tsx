@@ -292,7 +292,7 @@ export const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ scrollY 
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(5, 5, 8, 0.65) 100%)',
+            'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(3, 0, 20, 0.7) 100%)',
         }}
       />
     </div>

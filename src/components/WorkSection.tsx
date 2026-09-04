@@ -210,7 +210,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
     <div
       id="work"
       ref={containerRef}
-      className="relative w-screen min-h-[90vh] mt-[25vh] mb-12 sm:mb-16 md:mb-20 overflow-hidden select-none"
+      className="relative w-screen min-h-[90vh] mt-[20vh] mb-6 sm:mb-8 md:mb-10 overflow-hidden select-none"
     >
       {/* Main slider draggable area */}
       <div

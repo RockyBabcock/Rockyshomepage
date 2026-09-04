@@ -60,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({ siteData }) => {
   return (
     <footer
       ref={footerRef}
-      className="w-screen bg-[#131314] flex flex-col md:flex-row justify-between px-[13vw] py-[15vh] mt-[25vh] box-border"
+      className="w-screen bg-[#030014] flex flex-col md:flex-row justify-between px-[13vw] py-[15vh] mt-[20vh] box-border relative z-10"
     >
       {/* Left side info */}
       <div

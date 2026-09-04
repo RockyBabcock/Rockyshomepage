@@ -18,8 +18,12 @@
   -webkit-font-smoothing: antialiased;
 }
 
+html, body, #root {
+  background-color: #030014;
+}
+
 body {
-  background-color: #222224;
+  background-color: #030014;
   color: #ffffff;
   margin: 0;
   padding: 0;
