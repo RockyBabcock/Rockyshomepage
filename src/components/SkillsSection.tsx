@@ -74,23 +74,41 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
         aria-hidden="true"
       />
 
-      {/* Section Editorial Intro (Matching portfolio editorial standards) */}
+      {/* Section Editorial Intro (Matching portfolio editorial standards & Space Portfolio skill-text pattern) */}
       <div className="relative flex flex-col justify-start mb-[10vh] max-w-[1400px] mx-auto">
         {/* Eyebrow badge */}
-        <div className="flex items-center gap-3 mb-[2vh]">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+          className="flex items-center gap-3 mb-[2vh]"
+        >
           <span className="h-[1px] w-[3vw] bg-white/40" />
           <span className="tracking-[0.4vh] text-[1.25vh] font-bold text-white/50 uppercase font-[family-name:var(--body-font)]">
             03 — Capabilities & Architecture
           </span>
-        </div>
+        </motion.div>
 
         {/* Section Heading */}
-        <h2 className="title text-[14vw] md:text-[16vh] font-normal leading-[0.9] tracking-normal m-0 text-left">
+        <motion.h2
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
+          className="title text-[14vw] md:text-[16vh] font-normal leading-[0.9] tracking-normal m-0 text-left"
+        >
           Skills
-        </h2>
+        </motion.h2>
 
         {/* Space-Portfolio framing subtitle */}
-        <div className="relative mt-[4vh] ml-0 md:ml-[6vw] max-w-[840px]">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
+          className="relative mt-[4vh] ml-0 md:ml-[6vw] max-w-[840px]"
+        >
           <span className="hidden md:block absolute h-[1px] w-[5vw] -left-[6vw] top-[14%] bg-white/40" />
           <p className="font-[family-name:var(--title-font)] text-[2.2vh] md:text-[2.6vh] text-white/95 leading-snug tracking-wide mb-[1.5vh]">
             Engineering systems, interactive creative tech & scalable cloud foundations.
@@ -99,7 +117,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
             Organized into four primary architectural control modules spanning reactive client systems,
             high-throughput backends, relational integrity, and containerized deployment infrastructure.
           </p>
-        </div>
+        </motion.div>
       </div>
 
       {/* 

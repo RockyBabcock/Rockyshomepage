@@ -80,7 +80,7 @@ export const SkillModule: React.FC<SkillModuleProps> = ({
 
         {/* Consistent Uniform Technology Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
-          {skills.map((skill) => {
+          {skills.map((skill, i) => {
             const isActive = activeSkill?.id === skill.id;
             const isMuted =
               (hoveredSkill !== null && hoveredSkill.id !== skill.id) ||
@@ -90,6 +90,7 @@ export const SkillModule: React.FC<SkillModuleProps> = ({
               <SkillItem
                 key={skill.id}
                 skill={skill}
+                index={i}
                 isActive={isActive}
                 isMuted={isMuted}
                 onSelect={onSelectSkill}
