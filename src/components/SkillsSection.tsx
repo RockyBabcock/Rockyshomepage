@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import {
-  ROW_1_CORE_SKILLS,
-  ROW_2_FRONTEND_SKILLS,
-  ROW_3_BACKEND_SKILLS,
-  ROW_4_INFRA_SKILLS,
-  ROW_5_DESIGN_SKILLS,
+  SKILL_GROUPS,
+  SKILLS_BY_CATEGORY,
+  SKILLS_DATA,
   SkillItem,
 } from '../data/skills';
-import { SkillText } from './skills/SkillText';
-import { SkillDataProvider } from './skills/SkillDataProvider';
-import { SkillDetailModal } from './skills/SkillDetailModal';
+import { SkillsIntro } from './skills/SkillsIntro';
+import { SkillModule } from './skills/SkillModule';
+import { SkillInspectorPortal } from './skills/SkillInspectorPortal';
 
 interface SkillsSectionProps {
   onSelectProject?: (projectId: string) => void;
@@ -17,50 +15,39 @@ interface SkillsSectionProps {
 
 /**
  * SkillsSection
- * Completely rebuilt strictly based on sanidhyy/space-portfolio:
- * Skills
- *   ↓
- * SkillText
- *   ↓
- * multiple horizontal flex-wrap skill arrays
- *   ↓
- * floating technology icons
- *   ↓
- * staggered entrance animation
- *   ↓
- * central atmospheric video
+ * Advanced Futuristic Engineering / Creative Technology Control Console
+ * 
+ * Visual Hierarchy:
+ * SPACE ATMOSPHERE
+ * → EDITORIAL TYPOGRAPHY
+ * → FOUR LARGE TECHNOLOGY MODULES
+ * → SMALL UNIFORM TECHNOLOGY CARDS
+ * → HIGH-END INTERACTIVE INSPECTOR
  */
 export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject }) => {
-  const [activeSkill, setActiveSkill] = useState<SkillItem | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<SkillItem | null>(null);
 
   const handleSelectSkill = (skill: SkillItem) => {
-    setActiveSkill((prev) => (prev?.id === skill.id ? null : skill));
+    setSelectedSkill(skill);
   };
 
-  const handleCloseModal = () => {
-    setActiveSkill(null);
+  const handleCloseInspector = () => {
+    setSelectedSkill(null);
   };
-
-  // Cumulative offset index for smooth, continuous stagger across all bands
-  const row1Offset = 0;
-  const row2Offset = ROW_1_CORE_SKILLS.length;
-  const row3Offset = row2Offset + ROW_2_FRONTEND_SKILLS.length;
-  const row4Offset = row3Offset + ROW_3_BACKEND_SKILLS.length;
-  const row5Offset = row4Offset + ROW_4_INFRA_SKILLS.length;
 
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center justify-center w-full min-h-screen py-24 sm:py-28 md:py-36 px-4 sm:px-6 md:px-12 overflow-hidden text-white z-10"
-      aria-label="Technology Constellation and Capabilities"
+      className="relative flex flex-col items-center justify-center w-full min-h-screen py-24 sm:py-28 md:py-36 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10"
+      aria-label="Engineering Capabilities and Technology Control Console"
     >
       {/* 
         Central Atmospheric Space Video Layer (Space-Portfolio reference: /public/videos/skills-bg.webm)
-        Sits strictly local behind the floating icons with soft radial mask blending into the global star field.
+        Sits strictly local behind the console with soft radial mask blending into the global starfield.
       */}
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 flex items-center justify-center">
         <video
-          className="w-full h-full object-cover opacity-25 mix-blend-screen pointer-events-none"
+          className="w-full h-full object-cover opacity-20 mix-blend-screen pointer-events-none"
           preload="auto"
           playsInline
           loop
@@ -73,100 +60,79 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 25%, rgba(5, 5, 8, 0.8) 75%, #050508 100%)',
+              'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 20%, rgba(5, 5, 8, 0.85) 75%, #050508 100%)',
           }}
         />
       </div>
 
-      {/* Subtle Central Purple Spatial Atmosphere Glow */}
+      {/* Controlled Purple Spatial Atmosphere Glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1100px] h-[75vh] max-h-[750px] rounded-full pointer-events-none -z-10"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[1200px] h-[80vh] max-h-[800px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(112, 66, 248, 0.12) 0%, rgba(147, 51, 234, 0.04) 45%, transparent 75%)',
-          filter: 'blur(70px)',
+            'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(112, 66, 248, 0.12) 0%, rgba(147, 51, 234, 0.03) 45%, transparent 75%)',
+          filter: 'blur(80px)',
         }}
         aria-hidden="true"
       />
 
-      {/* Editorial Space-Portfolio Header (Welcome box pill + Heading + Technical Statement) */}
-      <SkillText />
+      {/* EDITORIAL TYPOGRAPHY INTRO */}
+      <SkillsIntro totalSkillsCount={SKILLS_DATA.length} />
 
-      {/*
-        Spatial Technology Constellation
-        Multiple organic horizontal flex-wrap bands (matching Space Portfolio's skills.tsx layout)
+      {/* 
+        FOUR PRIMARY TECHNOLOGY MODULES
+        Desktop layout:
+        FRONTEND (01)        BACKEND (02)
+        DATABASE (03)        DEVOPS / DESIGN (04)
+        With subtle architectural offset / spatial composition on large screens.
       */}
-      <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto gap-4 sm:gap-6 md:gap-8 z-10">
-        {/* ROW / GROUP 01 — Core Technologies */}
-        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-14 w-full max-w-4xl">
-          {ROW_1_CORE_SKILLS.map((skill, i) => (
-            <SkillDataProvider
-              key={skill.id}
-              skill={skill}
-              index={row1Offset + i}
-              onSelect={handleSelectSkill}
-              isSelected={activeSkill?.id === skill.id}
-            />
-          ))}
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start z-10">
+        {/* Left Column: 01 FRONTEND & 03 DATABASE */}
+        <div className="flex flex-col gap-8 lg:gap-10">
+          <SkillModule
+            group={SKILL_GROUPS[0]}
+            skills={SKILLS_BY_CATEGORY.frontend}
+            activeSkillId={selectedSkill?.id}
+            onSelectSkill={handleSelectSkill}
+            index={0}
+          />
+
+          <SkillModule
+            group={SKILL_GROUPS[2]}
+            skills={SKILLS_BY_CATEGORY.database}
+            activeSkillId={selectedSkill?.id}
+            onSelectSkill={handleSelectSkill}
+            index={2}
+          />
         </div>
 
-        {/* ROW / GROUP 02 — Frontend & Reactive Systems */}
-        <div className="flex flex-row justify-around flex-wrap items-center gap-5 sm:gap-8 md:gap-12 w-full max-w-4xl">
-          {ROW_2_FRONTEND_SKILLS.map((skill, i) => (
-            <SkillDataProvider
-              key={skill.id}
-              skill={skill}
-              index={row2Offset + i}
-              onSelect={handleSelectSkill}
-              isSelected={activeSkill?.id === skill.id}
-            />
-          ))}
-        </div>
+        {/* Right Column: 02 BACKEND & 04 DEVOPS / DESIGN (subtle spatial offset on lg screens) */}
+        <div className="flex flex-col gap-8 lg:gap-10 lg:translate-y-6">
+          <SkillModule
+            group={SKILL_GROUPS[1]}
+            skills={SKILLS_BY_CATEGORY.backend}
+            activeSkillId={selectedSkill?.id}
+            onSelectSkill={handleSelectSkill}
+            index={1}
+          />
 
-        {/* ROW / GROUP 03 — Graphics, Shaders & Backend Architecture */}
-        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-14 w-full max-w-3xl">
-          {ROW_3_BACKEND_SKILLS.map((skill, i) => (
-            <SkillDataProvider
-              key={skill.id}
-              skill={skill}
-              index={row3Offset + i}
-              onSelect={handleSelectSkill}
-              isSelected={activeSkill?.id === skill.id}
-            />
-          ))}
-        </div>
-
-        {/* ROW / GROUP 04 — Infrastructure, Cloud & Data Integrity */}
-        <div className="flex flex-row justify-around flex-wrap items-center gap-5 sm:gap-7 md:gap-12 w-full max-w-4xl">
-          {ROW_4_INFRA_SKILLS.map((skill, i) => (
-            <SkillDataProvider
-              key={skill.id}
-              skill={skill}
-              index={row4Offset + i}
-              onSelect={handleSelectSkill}
-              isSelected={activeSkill?.id === skill.id}
-            />
-          ))}
-        </div>
-
-        {/* ROW / GROUP 05 — Design, Tooling & Mobile Ergonomics */}
-        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-12 w-full max-w-2xl">
-          {ROW_5_DESIGN_SKILLS.map((skill, i) => (
-            <SkillDataProvider
-              key={skill.id}
-              skill={skill}
-              index={row5Offset + i}
-              onSelect={handleSelectSkill}
-              isSelected={activeSkill?.id === skill.id}
-            />
-          ))}
+          <SkillModule
+            group={SKILL_GROUPS[3]}
+            skills={SKILLS_BY_CATEGORY.devops_design}
+            activeSkillId={selectedSkill?.id}
+            onSelectSkill={handleSelectSkill}
+            index={3}
+          />
         </div>
       </div>
 
-      {/* Progressive Disclosure: Compact Rich Inspector Dialog */}
-      <SkillDetailModal
-        skill={activeSkill}
-        onClose={handleCloseModal}
+      {/* 
+        PREMIUM FULL-SCREEN SYSTEM INSPECTOR OVERLAY
+        Rendered via React Portal onto document.body to prevent any container clipping
+      */}
+      <SkillInspectorPortal
+        skill={selectedSkill}
+        onClose={handleCloseInspector}
         onSelectProject={onSelectProject}
       />
     </section>
