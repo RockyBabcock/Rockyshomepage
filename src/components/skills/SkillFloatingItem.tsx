@@ -8,6 +8,7 @@ interface SkillFloatingItemProps {
   index: number;
   onSelect: (skill: SkillItem) => void;
   isDimmed?: boolean;
+  isSelected?: boolean;
 }
 
 export const SkillFloatingItem: React.FC<SkillFloatingItemProps> = ({
@@ -15,6 +16,7 @@ export const SkillFloatingItem: React.FC<SkillFloatingItemProps> = ({
   index,
   onSelect,
   isDimmed = false,
+  isSelected = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -44,6 +46,8 @@ export const SkillFloatingItem: React.FC<SkillFloatingItemProps> = ({
     }
   };
 
+  const shouldHighlight = isSelected || isHovered;
+
   return (
     <motion.div
       custom={index}
@@ -51,8 +55,12 @@ export const SkillFloatingItem: React.FC<SkillFloatingItemProps> = ({
       whileInView="visible"
       viewport={{ once: true, amount: 0.15 }}
       variants={itemVariants}
-      className={`group relative flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 outline-none select-none ${
-        isDimmed ? 'opacity-35' : 'opacity-100'
+      className={`group relative flex flex-col items-center justify-center cursor-pointer transition-all duration-300 outline-none select-none ${
+        isSelected
+          ? 'opacity-100 z-20 scale-110'
+          : isDimmed
+          ? 'opacity-40 hover:opacity-100'
+          : 'opacity-100'
       }`}
       onClick={() => onSelect(skill)}
       onKeyDown={handleKeyDown}
@@ -61,34 +69,52 @@ export const SkillFloatingItem: React.FC<SkillFloatingItemProps> = ({
       tabIndex={0}
       role="button"
       aria-label={`View ${skill.name} architecture profile`}
+      aria-pressed={isSelected}
     >
       {/* Floating Logo Object: Pure icon with brand glow, NO rectangular card or border */}
       <div
-        className="relative flex items-center justify-center transition-transform duration-300 ease-out group-hover:scale-115 group-active:scale-105"
+        className={`relative flex items-center justify-center transition-all duration-300 ease-out ${
+          isSelected
+            ? 'scale-115'
+            : 'group-hover:scale-115 group-active:scale-105'
+        }`}
         style={{
-          filter: isHovered
-            ? `drop-shadow(0 0 20px ${skill.brandColor}99) drop-shadow(0 0 35px rgba(112, 66, 248, 0.3))`
+          filter: shouldHighlight
+            ? `drop-shadow(0 0 22px ${skill.brandColor}bb) drop-shadow(0 0 40px rgba(112, 66, 248, 0.35))`
             : 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))',
         }}
       >
-        {/* Soft radial aura behind logo on hover */}
+        {/* Soft radial aura behind logo */}
         <div
-          className="absolute inset-0 -inset-x-2 -inset-y-2 rounded-full pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+          className={`absolute inset-0 -inset-x-3 -inset-y-3 rounded-full pointer-events-none transition-opacity duration-300 ${
+            shouldHighlight ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          }`}
           style={{
-            background: `radial-gradient(circle, ${skill.brandColor}25 0%, rgba(112, 66, 248, 0.15) 50%, transparent 75%)`,
-            filter: 'blur(12px)',
+            background: `radial-gradient(circle, ${skill.brandColor}35 0%, rgba(112, 66, 248, 0.18) 50%, transparent 75%)`,
+            filter: 'blur(14px)',
           }}
           aria-hidden="true"
         />
 
         {/* Responsive Logo Container */}
-        <div className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] md:w-[72px] md:h-[72px] flex items-center justify-center relative z-10">
-          <TechLogo id={skill.id} size={64} className="w-full h-full object-contain" />
+        <div className="w-[52px] h-[52px] sm:w-[62px] sm:h-[62px] md:w-[68px] md:h-[68px] flex items-center justify-center relative z-10">
+          <TechLogo
+            id={skill.id}
+            size={58}
+            isConceptual={skill.isConceptual}
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
 
-      {/* Subtle, elegant label underneath: No heavy badge, no rectangular box */}
-      <span className="mt-2.5 text-[11px] sm:text-xs font-medium tracking-wide text-neutral-400 group-hover:text-white transition-colors duration-200 text-center whitespace-nowrap">
+      {/* Subtle, elegant label underneath */}
+      <span
+        className={`mt-2.5 text-[11px] sm:text-xs font-medium tracking-wide transition-colors duration-200 text-center whitespace-nowrap ${
+          isSelected
+            ? 'text-white font-semibold'
+            : 'text-neutral-400 group-hover:text-white'
+        }`}
+      >
         {skill.name}
       </span>
     </motion.div>

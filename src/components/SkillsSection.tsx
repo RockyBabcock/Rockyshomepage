@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SKILL_ROWS, SKILLS_BY_ROW, SkillItem } from '../data/skills';
 import { SkillText } from './skills/SkillText';
 import { SkillFloatingItem } from './skills/SkillFloatingItem';
-import { SkillDetailOverlay } from './skills/SkillDetailOverlay';
+import { SkillDetailDrawer } from './skills/SkillDetailDrawer';
 
 interface SkillsSectionProps {
   onSelectProject?: (projectId: string) => void;
@@ -15,11 +15,27 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center justify-center w-full min-h-screen py-24 sm:py-32 md:py-40 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10 bg-transparent"
+      className="relative flex flex-col items-center justify-center w-full min-h-screen pt-12 sm:pt-16 md:pt-20 pb-28 sm:pb-36 md:pb-44 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10 bg-transparent"
       aria-label="Skills and Technology Constellation"
     >
       {/* 
-        LAYER 2: Central Purple Nebula Video Background (Space-Portfolio reference: /public/videos/skills-bg.webm)
+        WORK → SKILLS SPATIAL ATMOSPHERIC BRIDGE
+        Extremely soft, wide purple/blue radial glow positioned between Work and Skills.
+        Eliminates vertical dead space, letting the star field continue naturally
+        while the purple atmosphere gently emerges before the Skills heading.
+      */}
+      <div
+        className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[380px] pointer-events-none -z-10"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(112, 66, 248, 0.11) 0%, rgba(79, 70, 229, 0.04) 45%, transparent 75%)',
+          filter: 'blur(100px)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 
+        LAYER 2: Central Purple Nebula Video Background
         Centered, looping, muted, playsInline, autoPlay at ~0.35 opacity.
         NO heavy black masks or opaque cards blocking it!
       */}
@@ -35,7 +51,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
         />
       </div>
 
-      {/* Controlled Purple Spatial Atmosphere Glow */}
+      {/* Controlled Purple Spatial Atmosphere Core Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1100px] h-[75vh] max-h-[750px] rounded-full pointer-events-none -z-10"
         style={{
@@ -65,27 +81,37 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
             >
               {/* Row Technology Constellation */}
               <div className="flex flex-row justify-center items-center flex-wrap gap-7 sm:gap-9 md:gap-11 lg:gap-14">
-                {rowSkills.map((skill, index) => (
-                  <div
-                    key={skill.id}
-                    onMouseEnter={() => setHoveredSkillId(skill.id)}
-                  >
-                    <SkillFloatingItem
-                      skill={skill}
-                      index={index}
-                      onSelect={(selected) => setSelectedSkill(selected)}
-                      isDimmed={hoveredSkillId !== null && hoveredSkillId !== skill.id}
-                    />
-                  </div>
-                ))}
+                {rowSkills.map((skill, index) => {
+                  const isSelected = selectedSkill?.id === skill.id;
+                  const isDimmed = selectedSkill !== null
+                    ? !isSelected
+                    : hoveredSkillId !== null && hoveredSkillId !== skill.id;
+
+                  return (
+                    <div
+                      key={skill.id}
+                      onMouseEnter={() => setHoveredSkillId(skill.id)}
+                    >
+                      <SkillFloatingItem
+                        skill={skill}
+                        index={index}
+                        onSelect={(selected) => {
+                          setSelectedSkill(selected);
+                        }}
+                        isSelected={isSelected}
+                        isDimmed={isDimmed}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Technology Profile Detail Overlay */}
-      <SkillDetailOverlay
+      {/* Right-Side Slide-Over / Floating HUD Profile Drawer */}
+      <SkillDetailDrawer
         skill={selectedSkill}
         onClose={() => setSelectedSkill(null)}
         onSelectProject={onSelectProject}

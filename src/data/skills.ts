@@ -6,9 +6,11 @@ export interface SkillItem {
   brandColor: string;
   role: string;
   shortRole: string;
+  editorialSummary?: string;
   tags: string[];
   usage: string;
   relatedProjects?: string[];
+  isConceptual?: boolean;
 }
 
 export interface SkillRowDefinition {
@@ -291,6 +293,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'REST APIs',
     row: 3,
     rowTitle: 'Backend',
+    isConceptual: true,
     brandColor: '#10B981',
     role: 'Idempotent HTTP Resource Contracts & Open-API Standards',
     shortRole: 'Resource Contracts & Standards',
@@ -327,6 +330,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'WebSockets',
     row: 3,
     rowTitle: 'Backend',
+    isConceptual: true,
     brandColor: '#F59E0B',
     role: 'Full-Duplex Bidirectional Protocols & State Broadcasts',
     shortRole: 'Full-Duplex Communication',
@@ -351,6 +355,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'Server-Sent Events',
     row: 3,
     rowTitle: 'Backend',
+    isConceptual: true,
     brandColor: '#06B6D4',
     role: 'Unidirectional Real-Time Streaming & AI Token Feeds',
     shortRole: 'Unidirectional Token Feeds',
@@ -591,6 +596,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'Streaming',
     row: 6,
     rowTitle: 'AI, Cloud & Protocols',
+    isConceptual: true,
     brandColor: '#14B8A6',
     role: 'Chunked Transfer Protocols & Progressive Content Hydration',
     shortRole: 'Chunked Protocols & Hydration',
@@ -603,6 +609,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'Function Calling',
     row: 6,
     rowTitle: 'AI, Cloud & Protocols',
+    isConceptual: true,
     brandColor: '#8B5CF6',
     role: 'Structured Output Enforcement & JSON Schema Invocation',
     shortRole: 'Structured Output & JSON Schema',
@@ -615,6 +622,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'Tool Use',
     row: 6,
     rowTitle: 'AI, Cloud & Protocols',
+    isConceptual: true,
     brandColor: '#EC4899',
     role: 'Autonomous Agent Orchestration & Real-World Side Effects',
     shortRole: 'Agentic Tool Orchestration',
@@ -675,6 +683,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'SIWE',
     row: 6,
     rowTitle: 'AI, Cloud & Protocols',
+    isConceptual: true,
     brandColor: '#627EEA',
     role: 'Sign-In With Ethereum & Cryptographic Identity Verification',
     shortRole: 'Cryptographic Auth Protocol',
@@ -687,6 +696,7 @@ export const SKILLS_DATA: SkillItem[] = [
     name: 'EIP-712',
     row: 6,
     rowTitle: 'AI, Cloud & Protocols',
+    isConceptual: true,
     brandColor: '#8C8C8C',
     role: 'Typed Structured Data Hashing & Gasless Meta-Transactions',
     shortRole: 'Typed Cryptographic Signing',
