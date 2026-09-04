@@ -1,12 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { getGPUTier } from 'detect-gpu';
 import { WorkItem } from '../types';
 import { lerp } from '../utils';
+import { ImageRenderer } from '../effects/work-slider/renderer';
 
 interface WorkSectionProps {
   workData: WorkItem[];
+  onSelectDestination?: (destination: string, item: WorkItem) => void;
 }
 
-export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
+export const WorkSection: React.FC<WorkSectionProps> = ({
+  workData,
+  onSelectDestination,
+}) => {
   const [currentActive, setCurrentActive] = useState<number>(-1);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -14,6 +20,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const rendererRef = useRef<ImageRenderer | null>(null);
 
   // Drag physics state
   const mouseState = useRef({
@@ -28,6 +35,8 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
 
   // Drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
+    // If a project is currently open/expanded, disable dragging
+    if (currentActive >= 0) return;
     // Don't drag if clicking buttons or links
     if (
       (e.target as HTMLElement).closest('.button') ||
@@ -57,6 +66,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
 
   // Touch support for mobile dragging
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (currentActive >= 0) return;
     if (
       (e.target as HTMLElement).closest('.button') ||
       (e.target as HTMLElement).closest('.close-button') ||
@@ -91,6 +101,55 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
     };
   }, [handleMouseMove, handleMouseUp, handleTouchMove]);
 
+  // Three.js ImageRenderer setup and GPU capability check
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function initImageRenderer() {
+      if (!containerRef.current || workData.length === 0) return;
+
+      try {
+        const gpuTier = await getGPUTier();
+        if (isCancelled) return;
+
+        // Exactly matching Musab-Hassan's condition: tier >= 2, not mobile, fps >= 30
+        const canRunThree =
+          gpuTier.tier >= 2 && !gpuTier.isMobile && (gpuTier.fps ?? 60) >= 30;
+
+        if (canRunThree && containerRef.current) {
+          // Wait a moment for images to be mounted in DOM
+          const validImages = imgRefs.current.filter(
+            (img): img is HTMLImageElement => Boolean(img && img.src)
+          );
+
+          if (validImages.length > 0) {
+            if (rendererRef.current) {
+              rendererRef.current.destroy();
+            }
+            rendererRef.current = new ImageRenderer(
+              containerRef.current,
+              validImages,
+              () => mouseState.current.speed
+            );
+          }
+        }
+      } catch (err) {
+        console.warn('Three.js work image renderer fallback:', err);
+      }
+    }
+
+    const timer = setTimeout(initImageRenderer, 150);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+      if (rendererRef.current) {
+        rendererRef.current.destroy();
+        rendererRef.current = null;
+      }
+    };
+  }, [workData]);
+
   // Main slider animation loop
   useEffect(() => {
     const loop = () => {
@@ -108,13 +167,15 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
           }
         }
 
-        const prevX = mouseState.current.currentX;
         mouseState.current.currentX = lerp(
           mouseState.current.currentX,
           mouseState.current.targetX,
           0.1
         );
-        mouseState.current.speed = mouseState.current.currentX - prevX;
+        mouseState.current.speed =
+          Math.round(
+            (mouseState.current.currentX - mouseState.current.targetX) * 100
+          ) / 100;
 
         listRef.current.style.transform = `translate3d(${mouseState.current.currentX.toFixed(
           2
@@ -163,7 +224,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
           <ul
             ref={listRef}
             className={`list-none flex flex-row items-center h-[75vh] min-w-min pl-[14vw] pr-[20vw] m-0 transition-opacity duration-500 will-change-transform ${
-              isDragging ? 'work-list-hold' : ''
+              isDragging ? 'is-dragging work-list-hold' : ''
             }`}
           >
             {workData.map((item, index) => {
@@ -182,6 +243,8 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
                       ? 'w-[50vw] h-[60vh] mr-[16vw] ml-[5vw] z-20'
                       : isAmbient
                       ? 'w-[23vw] h-[45vh] opacity-30 pointer-events-none'
+                      : isDragging
+                      ? 'w-[23vw] h-[45vh] max-[1450px]:w-[25vw] max-[1110px]:w-[40vw] max-[650px]:w-[75vw] z-10'
                       : 'w-[23vw] h-[55vh] max-[1450px]:w-[25vw] max-[1110px]:w-[40vw] max-[650px]:w-[75vw] z-10'
                   }`}
                 >
@@ -192,7 +255,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
                   >
                     <img
                       ref={(el) => (imgRefs.current[index] = el)}
-                      src={`/assets/imgs/work-back/${item.id}/cover.jpg`}
+                      src={item.image || `/assets/imgs/work-back/${item.id}/cover.jpg`}
                       alt={item.title}
                       draggable={false}
                       className="w-[110%] h-[110%] object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300"
@@ -203,13 +266,21 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
                   {/* Non-active Card Overlay: Item Index & View Button */}
                   {!isActive && (
                     <>
-                      <div className="absolute top-[6vh] right-0 z-10 text-right">
+                      <div
+                        className={`absolute top-[6vh] right-0 z-10 text-right transition-opacity duration-300 ease-out ${
+                          isDragging ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                        }`}
+                      >
                         <span className="font-[family-name:var(--body-font)] text-[1vw] max-[1110px]:text-[2vh] tracking-[0.1vw] uppercase text-white/80">
                           {displayIndex}
                         </span>
                       </div>
 
-                      <div className="absolute bottom-[8vh] right-0 z-10 text-right flex flex-col justify-end max-[1110px]:w-[calc(55vw-10vh)] max-[650px]:w-[calc(70vw-10vh)]">
+                      <div
+                        className={`absolute bottom-[8vh] right-0 z-10 text-right flex flex-col justify-end max-[1110px]:w-[calc(55vw-10vh)] max-[650px]:w-[calc(70vw-10vh)] transition-opacity duration-300 ease-out ${
+                          isDragging ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                        }`}
+                      >
                         <h2 className="font-[family-name:var(--title-font)] text-[2.5vw] max-[1110px]:text-[5vw] max-[650px]:text-[4vh] text-white lowercase tracking-[0.05vw] leading-[110%] font-normal">
                           {item.title}
                         </h2>
@@ -287,8 +358,22 @@ export const WorkSection: React.FC<WorkSectionProps> = ({ workData }) => {
                 </div>
               </div>
 
-              {/* Links */}
+              {/* Links and destination gateway */}
               <div className="flex-1 flex flex-col items-start md:items-end gap-[1.5vh]">
+                {workData[currentActive].destination && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSelectDestination?.(
+                        workData[currentActive].destination!,
+                        workData[currentActive]
+                      )
+                    }
+                    className="button uppercase text-[1.1vw] max-[750px]:text-[1.8vh] tracking-[0.2vw] no-underline clickable text-white font-[family-name:var(--body-font)] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-colors"
+                  >
+                    Open {workData[currentActive].destination} &rarr;
+                  </button>
+                )}
                 {workData[currentActive].links?.map((link) => (
                   <a
                     key={link.link}

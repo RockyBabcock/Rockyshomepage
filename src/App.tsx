@@ -117,6 +117,15 @@ export default function App() {
     }
   };
 
+  const handleDestination = (destination: string) => {
+    const lower = destination.toLowerCase().trim();
+    if (lower === 'about' || lower === 'work' || lower === 'home') {
+      handleNavigate(lower);
+    } else if (lower === 'contact' || lower === 'footer') {
+      handleNavigate('footer');
+    }
+  };
+
   return (
     <>
       {/* Interactive custom cursor */}
@@ -128,19 +137,22 @@ export default function App() {
       {/* Atmospheric 3D Starfield & Spatial Depth Layer */}
       <ParticleBackground scrollY={scrollY} />
 
-      {/* Main scrolling viewport container */}
+      {/* Main scrolling viewport container (Layer 2: Content Layer at z-10) */}
       <div
         id="scroll-frame"
         ref={scrollFrameRef}
         onScroll={handleScroll}
-        className="w-full h-screen relative overflow-x-hidden overflow-y-auto"
+        className="w-full h-screen relative z-10 overflow-x-hidden overflow-y-auto"
         style={{ overflowY: loading ? 'hidden' : 'auto' }}
       >
         <Navbar onNavigate={handleNavigate} />
 
         <HomeSection scrollY={scrollY} />
 
-        <WorkSection workData={workData} />
+        <WorkSection
+          workData={workData}
+          onSelectDestination={handleDestination}
+        />
 
         <AboutSection scrollY={scrollY} />
 

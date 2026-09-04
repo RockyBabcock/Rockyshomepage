@@ -16,6 +16,8 @@ export interface WorkDetails {
 export interface WorkItem {
   id: string;
   title: string;
+  image?: string;
+  destination?: string;
   details: WorkDetails;
   date?: string;
   roles: string[];
