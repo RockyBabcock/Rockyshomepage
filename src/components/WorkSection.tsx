@@ -287,8 +287,11 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
                         <div className="mt-[1.5vh]">
                           <button
                             type="button"
-                            onClick={() => toggleActiveItem(index)}
-                            className="button border-none bg-transparent uppercase text-[1.2vw] max-[1110px]:text-[1.8vh] tracking-[0.1vw] clickable"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleActiveItem(index);
+                            }}
+                            className="button item-link interactive border-none bg-transparent uppercase text-[1.2vw] max-[1110px]:text-[1.8vh] tracking-[0.1vw] clickable"
                           >
                             view project
                           </button>
@@ -322,7 +325,11 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
                 {workData[currentActive].title}
               </h1>
               <button
-                onClick={() => toggleActiveItem(currentActive)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleActiveItem(currentActive);
+                }}
                 className="close-button border-none bg-transparent text-white text-[4vw] max-[750px]:text-[6vh] cursor-pointer clickable p-2 hover:opacity-75 transition-opacity max-[750px]:absolute max-[750px]:top-0 max-[750px]:right-0"
                 aria-label="Close Project Details"
               >

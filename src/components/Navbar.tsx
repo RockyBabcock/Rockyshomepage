@@ -67,10 +67,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
           </li>
           <li className="font-[family-name:var(--body-font)] uppercase text-[2vh] tracking-[0.2vh] inline-flex items-center">
             <button
-              onClick={() => handleNavClick('about')}
+              onClick={() => handleNavClick('skills')}
               className="border-none bg-transparent text-white uppercase font-inherit text-inherit tracking-inherit cursor-pointer clickable hover:opacity-80 transition-opacity"
             >
-              About
+              Skills
             </button>
             <span className="mx-[0.4vw] text-white/70">-</span>
           </li>
@@ -148,10 +148,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
           </li>
           <li className="font-[family-name:var(--body-font)] font-bold lowercase text-[9vw] py-[2vh] border-b border-white/30">
             <button
-              onClick={() => handleNavClick('about')}
+              onClick={() => handleNavClick('skills')}
               className="border-none bg-transparent text-white font-inherit text-inherit cursor-pointer text-left w-full clickable"
             >
-              about
+              skills
             </button>
           </li>
           <li className="font-[family-name:var(--body-font)] font-bold lowercase text-[9vw] py-[2vh] border-b border-white/30">

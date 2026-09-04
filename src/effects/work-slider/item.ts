@@ -52,4 +52,11 @@ export class SliderImageMesh extends ImageMesh {
       this.uniforms.uTime.value = this.clock.getElapsedTime() * 0.8;
     }
   }
+
+  destroy(): void {
+    if (this.element.parentElement) {
+      this.element.parentElement.style.visibility = 'visible';
+    }
+    super.destroy();
+  }
 }

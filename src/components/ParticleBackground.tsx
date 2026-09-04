@@ -77,6 +77,15 @@ export const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ scrollY 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
+  // Runtime scroll ref so animation loop reads high-frequency updates without recreating Three.js scene
+  const scrollYRef = useRef(scrollY);
+  useEffect(() => {
+    scrollYRef.current = scrollY;
+  }, [scrollY]);
+
+  // Section-based atmosphere intensity tracking (Home: subtle -> Work: balanced -> Skills: enhanced depth -> Footer: calm)
+  const intensityRef = useRef(0.8);
+
   // Mouse parallax state for spatial depth
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
@@ -254,13 +263,34 @@ export const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ scrollY 
       mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.05;
       mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.05;
 
-      const scrollTilt = (scrollY * 0.0002) % (Math.PI * 2);
+      const currentScrollY = scrollYRef.current;
+      const scrollTilt = (currentScrollY * 0.0002) % (Math.PI * 2);
+
+      // Section-based atmosphere modulation (Home -> Work -> Skills -> Footer)
+      const vh = window.innerHeight;
+      let targetIntensity = 0.8;
+      if (currentScrollY < vh * 0.8) {
+        targetIntensity = 0.8; // Home: subtle, calm
+      } else if (currentScrollY < vh * 2.1) {
+        targetIntensity = 1.0; // Work: medium
+      } else if (currentScrollY < vh * 3.4) {
+        targetIntensity = 1.22; // Skills: slightly enhanced depth
+      } else {
+        targetIntensity = 0.75; // Footer: quiet
+      }
+      intensityRef.current += (targetIntensity - intensityRef.current) * 0.04;
 
       if (useWebGL && renderer && threeScene && threeCamera) {
         layerData.forEach((layer, index) => {
           if (!prefersReducedMotion) {
             layer.rotX -= delta * layer.config.rotSpeedX;
             layer.rotY -= delta * layer.config.rotSpeedY;
+          }
+
+          const points = threePointsList[index];
+          if (points && points.material) {
+            (points.material as THREE.PointsMaterial).opacity =
+              layer.config.opacity * intensityRef.current;
           }
 
           const group = threeGroups[index];
@@ -344,7 +374,7 @@ export const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ scrollY 
                 const r = Math.round(colors[i * 3] * 255);
                 const g = Math.round(colors[i * 3 + 1] * 255);
                 const b = Math.round(colors[i * 3 + 2] * 255);
-                const alpha = (depthRatio * layer.config.opacity).toFixed(2);
+                const alpha = (depthRatio * layer.config.opacity * intensityRef.current).toFixed(2);
 
                 ctx.beginPath();
                 ctx.arc(screenX, screenY, starRadius, 0, Math.PI * 2);
@@ -399,7 +429,7 @@ export const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ scrollY 
         }
       });
     };
-  }, [prefersReducedMotion, scrollY]);
+  }, [prefersReducedMotion]);
 
   return (
     <div

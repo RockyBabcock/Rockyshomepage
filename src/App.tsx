@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { HomeSection } from './components/HomeSection';
 import { WorkSection } from './components/WorkSection';
-import { AboutSection } from './components/AboutSection';
+import { SkillsSection } from './components/SkillsSection';
 import { Footer } from './components/Footer';
 import { CursorDot } from './components/CursorDot';
 import { Loader } from './components/Loader';
@@ -119,7 +119,9 @@ export default function App() {
 
   const handleDestination = (destination: string) => {
     const lower = destination.toLowerCase().trim();
-    if (lower === 'about' || lower === 'work' || lower === 'home') {
+    if (lower === 'about' || lower === 'skills') {
+      handleNavigate('skills');
+    } else if (lower === 'work' || lower === 'home') {
       handleNavigate(lower);
     } else if (lower === 'contact' || lower === 'footer') {
       handleNavigate('footer');
@@ -154,7 +156,7 @@ export default function App() {
           onSelectDestination={handleDestination}
         />
 
-        <AboutSection scrollY={scrollY} />
+        <SkillsSection onSelectProject={() => handleNavigate('work')} />
 
         <Footer siteData={siteData} />
       </div>
