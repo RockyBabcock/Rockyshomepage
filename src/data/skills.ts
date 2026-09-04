@@ -16,12 +16,14 @@ export interface SkillItem {
   icon: string;
   brandColor: string;
   badge: string; // e.g., 'CORE', '2+ YRS', 'SSR', 'RELATIONAL', 'REAL-TIME', 'CLOUD', 'DESIGN'
-  shortRole: string; // concise description for consistent card structure
+  shortRole: string; // concise description
   role: string; // architectural role
   usage: string; // application context
   relatedProjects?: string[];
   tags: string[];
   featured?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export const PROJECT_NAMES: Record<string, { title: string; number: string }> = {
@@ -82,6 +84,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['lcml', 'marymount', 'v1'],
     tags: ['Static Types', 'Generics', 'Strict Mode', 'Contracts'],
     featured: true,
+    width: 76,
+    height: 76,
   },
   {
     id: 'react',
@@ -96,6 +100,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['marymount', 'lcml', 'v1'],
     tags: ['Hooks', 'Virtual DOM', 'State Management', 'Components'],
     featured: true,
+    width: 80,
+    height: 80,
   },
   {
     id: 'javascript',
@@ -109,6 +115,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Async/await pipelines, DOM events, Web Streams, and functional data transformations.',
     relatedProjects: ['v1', 'grillzzy'],
     tags: ['Async/Await', 'Event Loop', 'DOM', 'Closures'],
+    width: 66,
+    height: 66,
   },
   {
     id: 'svelte',
@@ -123,6 +131,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['v1'],
     tags: ['Compiler', 'Zero VDOM', 'Micro-Interactions', 'Transitions'],
     featured: true,
+    width: 68,
+    height: 68,
   },
   {
     id: 'tailwind',
@@ -137,6 +147,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['lcml', 'v1'],
     tags: ['Design Systems', 'Utility-First', 'Tokens', 'Responsive'],
     featured: true,
+    width: 72,
+    height: 72,
   },
   {
     id: 'html5',
@@ -150,6 +162,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'WCAG compliance, screen-reader friendly landmarks, and optimized meta configurations.',
     relatedProjects: ['marymount', 'grillzzy', 'v1'],
     tags: ['Semantic DOM', 'Accessibility', 'ARIA', 'SEO'],
+    width: 66,
+    height: 66,
   },
 
   // ==========================================
@@ -168,6 +182,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['marymount', 'kic'],
     tags: ['Runtime', 'Express', 'Async I/O', 'REST'],
     featured: true,
+    width: 78,
+    height: 78,
   },
   {
     id: 'api',
@@ -181,6 +197,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Strict payload validation, caching strategies, pagination, and predictable client fetching.',
     relatedProjects: ['marymount', 'kic'],
     tags: ['API Contracts', 'JSON', 'Endpoints', 'HTTP'],
+    width: 66,
+    height: 66,
   },
   {
     id: 'php',
@@ -194,6 +212,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Headless CMS implementations, secure admin dashboards, and database querying.',
     relatedProjects: ['marymount', 'lcml'],
     tags: ['CMS', 'Server-Side', 'APIs', 'MySQL'],
+    width: 66,
+    height: 66,
   },
   {
     id: 'threejs',
@@ -208,6 +228,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['v1'],
     tags: ['3D Graphics', 'WebGL', 'SceneGraph', 'Perspective'],
     featured: true,
+    width: 80,
+    height: 80,
   },
   {
     id: 'shaders',
@@ -222,6 +244,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['v1'],
     tags: ['GPU', 'Fragment Shaders', 'Simplex Noise', 'Math'],
     featured: true,
+    width: 68,
+    height: 68,
   },
   {
     id: 'motion',
@@ -235,6 +259,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Cubic-bezier easing curves, staggered viewport entries, and inertial drag responsiveness.',
     relatedProjects: ['v1', 'grillzzy'],
     tags: ['Spring Physics', 'Interpolation', 'Choreography', 'Transitions'],
+    width: 66,
+    height: 66,
   },
 
   // ==========================================
@@ -253,6 +279,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['marymount', 'lcml'],
     tags: ['SQL', 'Schemas', 'Relational', 'ACID'],
     featured: true,
+    width: 76,
+    height: 76,
   },
   {
     id: 'firebase',
@@ -267,6 +295,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['kic'],
     tags: ['Firestore', 'Auth', 'Realtime', 'Document Store'],
     featured: true,
+    width: 64,
+    height: 64,
   },
   {
     id: 'schema_arch',
@@ -280,6 +310,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Foreign key constraints, migration lifecycles, and high-performance read projections.',
     relatedProjects: ['marymount', 'lcml'],
     tags: ['Normalization', 'Constraints', 'Migrations', 'Queries'],
+    width: 62,
+    height: 62,
   },
   {
     id: 'cache_store',
@@ -293,6 +325,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Hydration persistence, optimistic updates, and resilient offline cache boundaries.',
     relatedProjects: ['v1', 'marymount'],
     tags: ['Offline First', 'State Sync', 'Hydration', 'Cache'],
+    width: 62,
+    height: 62,
   },
 
   // ==========================================
@@ -310,6 +344,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Multi-stage Docker builds, lightweight image creation, and deployment pipelines.',
     relatedProjects: ['marymount'],
     tags: ['Containers', 'DevOps', 'Reproducibility', 'Deploy'],
+    width: 68,
+    height: 68,
   },
   {
     id: 'gcp',
@@ -324,6 +360,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['marymount', 'kic'],
     tags: ['Cloud Run', 'GCP', 'Storage', 'Serverless'],
     featured: true,
+    width: 66,
+    height: 66,
   },
   {
     id: 'git',
@@ -337,6 +375,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Branching workflows, semantic releases, pull-request reviews, and GitHub Actions.',
     relatedProjects: ['marymount', 'lcml', 'v1', 'kic', 'grillzzy'],
     tags: ['VCS', 'Collaboration', 'CI/CD', 'Open Source'],
+    width: 64,
+    height: 64,
   },
   {
     id: 'figma',
@@ -351,6 +391,8 @@ export const SKILLS_DATA: SkillItem[] = [
     relatedProjects: ['marymount', 'lcml', 'v1', 'kic', 'grillzzy'],
     tags: ['UI/UX', 'Wireframing', 'Prototyping', 'Design Systems'],
     featured: true,
+    width: 60,
+    height: 60,
   },
   {
     id: 'vite',
@@ -364,6 +406,8 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Fast development cold-starts, Rollup tree-shaking, and production asset optimization.',
     relatedProjects: ['marymount', 'lcml', 'v1'],
     tags: ['Bundler', 'Rollup', 'ESM', 'Optimization'],
+    width: 62,
+    height: 62,
   },
   {
     id: 'mobile_systems',
@@ -377,5 +421,65 @@ export const SKILLS_DATA: SkillItem[] = [
     usage: 'Mobile touch boundaries, safe area insets, and progressive web application paradigms.',
     relatedProjects: ['kic', 'v1'],
     tags: ['Mobile First', 'Touch UI', 'Adaptive', 'PWA'],
+    width: 60,
+    height: 60,
   },
+];
+
+// Lookup map for fast retrieval
+export const SKILLS_MAP = new Map(SKILLS_DATA.map((s) => [s.id, s]));
+
+// =================================================================
+// 5 SPATIAL CONSTELLATION BANDS (Matching Space Portfolio architecture)
+// Each technology appears EXACTLY ONCE with intentional sizing & hierarchy
+// =================================================================
+
+// ROW 01 — Large Core Technologies (High prominence 76-80px)
+export const ROW_1_CORE_SKILLS: SkillItem[] = [
+  SKILLS_MAP.get('typescript')!,
+  SKILLS_MAP.get('react')!,
+  SKILLS_MAP.get('threejs')!,
+  SKILLS_MAP.get('nodejs')!,
+  SKILLS_MAP.get('postgresql')!,
+];
+
+// ROW 02 — Frontend & Reactive Systems (66-72px)
+export const ROW_2_FRONTEND_SKILLS: SkillItem[] = [
+  SKILLS_MAP.get('javascript')!,
+  SKILLS_MAP.get('svelte')!,
+  SKILLS_MAP.get('tailwind')!,
+  SKILLS_MAP.get('html5')!,
+  SKILLS_MAP.get('motion')!,
+];
+
+// ROW 03 — Graphics, Shaders & Backend Architecture (64-68px)
+export const ROW_3_BACKEND_SKILLS: SkillItem[] = [
+  SKILLS_MAP.get('shaders')!,
+  SKILLS_MAP.get('api')!,
+  SKILLS_MAP.get('php')!,
+  SKILLS_MAP.get('firebase')!,
+];
+
+// ROW 04 — Infrastructure, Cloud & Data Integrity (62-68px)
+export const ROW_4_INFRA_SKILLS: SkillItem[] = [
+  SKILLS_MAP.get('docker')!,
+  SKILLS_MAP.get('gcp')!,
+  SKILLS_MAP.get('schema_arch')!,
+  SKILLS_MAP.get('cache_store')!,
+  SKILLS_MAP.get('git')!,
+];
+
+// ROW 05 — Design, Tooling & Mobile Ergonomics (60-62px)
+export const ROW_5_DESIGN_SKILLS: SkillItem[] = [
+  SKILLS_MAP.get('figma')!,
+  SKILLS_MAP.get('vite')!,
+  SKILLS_MAP.get('mobile_systems')!,
+];
+
+export const SKILL_CONSTELLATION_ROWS = [
+  { id: 'row-1', label: 'Core Foundations', skills: ROW_1_CORE_SKILLS },
+  { id: 'row-2', label: 'Frontend & Reactive Systems', skills: ROW_2_FRONTEND_SKILLS },
+  { id: 'row-3', label: 'Graphics, Shaders & Backend', skills: ROW_3_BACKEND_SKILLS },
+  { id: 'row-4', label: 'Cloud, DevOps & Data Integrity', skills: ROW_4_INFRA_SKILLS },
+  { id: 'row-5', label: 'Design & Tooling Systems', skills: ROW_5_DESIGN_SKILLS },
 ];

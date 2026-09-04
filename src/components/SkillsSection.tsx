@@ -1,51 +1,66 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import {
-  SKILLS_DATA,
-  SKILL_GROUPS,
-  SkillItem as SkillItemType,
+  ROW_1_CORE_SKILLS,
+  ROW_2_FRONTEND_SKILLS,
+  ROW_3_BACKEND_SKILLS,
+  ROW_4_INFRA_SKILLS,
+  ROW_5_DESIGN_SKILLS,
+  SkillItem,
 } from '../data/skills';
-import { SkillModule } from './skills/SkillModule';
+import { SkillText } from './skills/SkillText';
+import { SkillDataProvider } from './skills/SkillDataProvider';
+import { SkillDetailModal } from './skills/SkillDetailModal';
 
 interface SkillsSectionProps {
   onSelectProject?: (projectId: string) => void;
 }
 
+/**
+ * SkillsSection
+ * Completely rebuilt strictly based on sanidhyy/space-portfolio:
+ * Skills
+ *   ↓
+ * SkillText
+ *   ↓
+ * multiple horizontal flex-wrap skill arrays
+ *   ↓
+ * floating technology icons
+ *   ↓
+ * staggered entrance animation
+ *   ↓
+ * central atmospheric video
+ */
 export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject }) => {
-  const [activeSkill, setActiveSkill] = useState<SkillItemType | null>(null);
-  const [hoveredSkill, setHoveredSkill] = useState<SkillItemType | null>(null);
+  const [activeSkill, setActiveSkill] = useState<SkillItem | null>(null);
 
-  const handleSelectSkill = (skill: SkillItemType) => {
+  const handleSelectSkill = (skill: SkillItem) => {
     setActiveSkill((prev) => (prev?.id === skill.id ? null : skill));
   };
 
-  const handleCloseDetail = () => {
+  const handleCloseModal = () => {
     setActiveSkill(null);
   };
 
-  const frontendSkills = SKILLS_DATA.filter((s) => s.category === 'frontend');
-  const backendSkills = SKILLS_DATA.filter((s) => s.category === 'backend');
-  const databaseSkills = SKILLS_DATA.filter((s) => s.category === 'database');
-  const devopsDesignSkills = SKILLS_DATA.filter((s) => s.category === 'devops_design');
-
-  const frontendGroup = SKILL_GROUPS.find((g) => g.id === 'frontend')!;
-  const backendGroup = SKILL_GROUPS.find((g) => g.id === 'backend')!;
-  const databaseGroup = SKILL_GROUPS.find((g) => g.id === 'database')!;
-  const devopsDesignGroup = SKILL_GROUPS.find((g) => g.id === 'devops_design')!;
+  // Cumulative offset index for smooth, continuous stagger across all bands
+  const row1Offset = 0;
+  const row2Offset = ROW_1_CORE_SKILLS.length;
+  const row3Offset = row2Offset + ROW_2_FRONTEND_SKILLS.length;
+  const row4Offset = row3Offset + ROW_3_BACKEND_SKILLS.length;
+  const row5Offset = row4Offset + ROW_4_INFRA_SKILLS.length;
 
   return (
     <section
       id="skills"
-      className="relative w-full min-h-screen overflow-hidden px-[6vw] md:px-[8vw] lg:px-[10vw] pt-[16vh] pb-[22vh] text-white z-10"
-      aria-label="Capabilities and Technology Ecosystem"
+      className="relative flex flex-col items-center justify-center w-full min-h-screen py-24 sm:py-28 md:py-36 px-4 sm:px-6 md:px-12 overflow-hidden text-white z-10"
+      aria-label="Technology Constellation and Capabilities"
     >
       {/* 
-        Local Atmospheric Background Video Layer (Space-Portfolio reference: /public/videos/skills-bg.webm)
-        Sits strictly local to this section, below content and balanced with the global star field.
+        Central Atmospheric Space Video Layer (Space-Portfolio reference: /public/videos/skills-bg.webm)
+        Sits strictly local behind the floating icons with soft radial mask blending into the global star field.
       */}
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 flex items-center justify-center">
         <video
-          className="w-full h-full object-cover opacity-20 mix-blend-screen pointer-events-none"
+          className="w-full h-full object-cover opacity-25 mix-blend-screen pointer-events-none"
           preload="auto"
           playsInline
           loop
@@ -53,142 +68,107 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject })
           autoPlay
           src="/videos/skills-bg.webm"
         />
-        {/* Soft radial mask blending the video into the surrounding star field */}
+        {/* Soft radial mask blending the video into the surrounding deep space starfield */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 25%, rgba(5, 5, 8, 0.75) 75%, #050508 100%)',
+              'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 25%, rgba(5, 5, 8, 0.8) 75%, #050508 100%)',
           }}
         />
       </div>
 
-      {/* Subtle Central Spatial Atmosphere & Depth Glow */}
+      {/* Subtle Central Purple Spatial Atmosphere Glow */}
       <div
-        className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[1200px] h-[70vh] max-h-[850px] rounded-full pointer-events-none -z-10"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1100px] h-[75vh] max-h-[750px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(255, 255, 255, 0.035) 0%, rgba(99, 102, 241, 0.02) 40%, transparent 75%)',
-          filter: 'blur(60px)',
+            'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(112, 66, 248, 0.12) 0%, rgba(147, 51, 234, 0.04) 45%, transparent 75%)',
+          filter: 'blur(70px)',
         }}
         aria-hidden="true"
       />
 
-      {/* Section Editorial Intro (Matching portfolio editorial standards & Space Portfolio skill-text pattern) */}
-      <div className="relative flex flex-col justify-start mb-[10vh] max-w-[1400px] mx-auto">
-        {/* Eyebrow badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-          className="flex items-center gap-3 mb-[2vh]"
-        >
-          <span className="h-[1px] w-[3vw] bg-white/40" />
-          <span className="tracking-[0.4vh] text-[1.25vh] font-bold text-white/50 uppercase font-[family-name:var(--body-font)]">
-            03 — Capabilities & Architecture
-          </span>
-        </motion.div>
+      {/* Editorial Space-Portfolio Header (Welcome box pill + Heading + Technical Statement) */}
+      <SkillText />
 
-        {/* Section Heading */}
-        <motion.h2
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
-          className="title text-[14vw] md:text-[16vh] font-normal leading-[0.9] tracking-normal m-0 text-left"
-        >
-          Skills
-        </motion.h2>
-
-        {/* Space-Portfolio framing subtitle */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-          className="relative mt-[4vh] ml-0 md:ml-[6vw] max-w-[840px]"
-        >
-          <span className="hidden md:block absolute h-[1px] w-[5vw] -left-[6vw] top-[14%] bg-white/40" />
-          <p className="font-[family-name:var(--title-font)] text-[2.2vh] md:text-[2.6vh] text-white/95 leading-snug tracking-wide mb-[1.5vh]">
-            Engineering systems, interactive creative tech & scalable cloud foundations.
-          </p>
-          <p className="font-[family-name:var(--body-font)] text-white/60 text-[1.55vh] max-[750px]:text-[3.2vw] leading-relaxed">
-            Organized into four primary architectural control modules spanning reactive client systems,
-            high-throughput backends, relational integrity, and containerized deployment infrastructure.
-          </p>
-        </motion.div>
-      </div>
-
-      {/* 
-        Spatial Hierarchy: Four Primary Technology Modules
-        Organized with subtle vertical offsets and depth layering rather than a flat rigid 2x2 grid.
+      {/*
+        Spatial Technology Constellation
+        Multiple organic horizontal flex-wrap bands (matching Space Portfolio's skills.tsx layout)
       */}
-      <div className="relative max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 items-start">
-          {/* Column 1: Frontend & Database */}
-          <div className="flex flex-col gap-6 md:gap-10">
-            {/* 01 — FRONTEND */}
-            <SkillModule
-              group={frontendGroup}
-              skills={frontendSkills}
-              activeSkill={activeSkill}
-              hoveredSkill={hoveredSkill}
-              onSelectSkill={handleSelectSkill}
-              onHoverSkill={setHoveredSkill}
-              onCloseDetail={handleCloseDetail}
-              onSelectProject={onSelectProject}
-              verticalOffsetClass="md:-translate-y-2"
-              delayIndex={0}
+      <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto gap-4 sm:gap-6 md:gap-8 z-10">
+        {/* ROW / GROUP 01 — Core Technologies */}
+        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-14 w-full max-w-4xl">
+          {ROW_1_CORE_SKILLS.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.id}
+              skill={skill}
+              index={row1Offset + i}
+              onSelect={handleSelectSkill}
+              isSelected={activeSkill?.id === skill.id}
             />
+          ))}
+        </div>
 
-            {/* 03 — DATABASE */}
-            <SkillModule
-              group={databaseGroup}
-              skills={databaseSkills}
-              activeSkill={activeSkill}
-              hoveredSkill={hoveredSkill}
-              onSelectSkill={handleSelectSkill}
-              onHoverSkill={setHoveredSkill}
-              onCloseDetail={handleCloseDetail}
-              onSelectProject={onSelectProject}
-              verticalOffsetClass="md:translate-y-2"
-              delayIndex={2}
+        {/* ROW / GROUP 02 — Frontend & Reactive Systems */}
+        <div className="flex flex-row justify-around flex-wrap items-center gap-5 sm:gap-8 md:gap-12 w-full max-w-4xl">
+          {ROW_2_FRONTEND_SKILLS.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.id}
+              skill={skill}
+              index={row2Offset + i}
+              onSelect={handleSelectSkill}
+              isSelected={activeSkill?.id === skill.id}
             />
-          </div>
+          ))}
+        </div>
 
-          {/* Column 2: Backend & DevOps / Design */}
-          <div className="flex flex-col gap-6 md:gap-10 md:pt-6 lg:pt-8">
-            {/* 02 — BACKEND */}
-            <SkillModule
-              group={backendGroup}
-              skills={backendSkills}
-              activeSkill={activeSkill}
-              hoveredSkill={hoveredSkill}
-              onSelectSkill={handleSelectSkill}
-              onHoverSkill={setHoveredSkill}
-              onCloseDetail={handleCloseDetail}
-              onSelectProject={onSelectProject}
-              verticalOffsetClass="md:translate-y-4"
-              delayIndex={1}
+        {/* ROW / GROUP 03 — Graphics, Shaders & Backend Architecture */}
+        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-14 w-full max-w-3xl">
+          {ROW_3_BACKEND_SKILLS.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.id}
+              skill={skill}
+              index={row3Offset + i}
+              onSelect={handleSelectSkill}
+              isSelected={activeSkill?.id === skill.id}
             />
+          ))}
+        </div>
 
-            {/* 04 — DEVOPS / DESIGN */}
-            <SkillModule
-              group={devopsDesignGroup}
-              skills={devopsDesignSkills}
-              activeSkill={activeSkill}
-              hoveredSkill={hoveredSkill}
-              onSelectSkill={handleSelectSkill}
-              onHoverSkill={setHoveredSkill}
-              onCloseDetail={handleCloseDetail}
-              onSelectProject={onSelectProject}
-              verticalOffsetClass="md:translate-y-8"
-              delayIndex={3}
+        {/* ROW / GROUP 04 — Infrastructure, Cloud & Data Integrity */}
+        <div className="flex flex-row justify-around flex-wrap items-center gap-5 sm:gap-7 md:gap-12 w-full max-w-4xl">
+          {ROW_4_INFRA_SKILLS.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.id}
+              skill={skill}
+              index={row4Offset + i}
+              onSelect={handleSelectSkill}
+              isSelected={activeSkill?.id === skill.id}
             />
-          </div>
+          ))}
+        </div>
+
+        {/* ROW / GROUP 05 — Design, Tooling & Mobile Ergonomics */}
+        <div className="flex flex-row justify-around flex-wrap items-center gap-6 sm:gap-8 md:gap-12 w-full max-w-2xl">
+          {ROW_5_DESIGN_SKILLS.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.id}
+              skill={skill}
+              index={row5Offset + i}
+              onSelect={handleSelectSkill}
+              isSelected={activeSkill?.id === skill.id}
+            />
+          ))}
         </div>
       </div>
+
+      {/* Progressive Disclosure: Compact Rich Inspector Dialog */}
+      <SkillDetailModal
+        skill={activeSkill}
+        onClose={handleCloseModal}
+        onSelectProject={onSelectProject}
+      />
     </section>
   );
 };
