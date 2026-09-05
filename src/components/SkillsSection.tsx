@@ -1,130 +1,96 @@
 import React, { useState } from 'react';
-import { SKILL_ROWS, SKILLS_BY_ROW, SkillItem } from '../data/skills';
-import { SkillText } from './skills/SkillText';
-import { SkillFloatingItem } from './skills/SkillFloatingItem';
-import { SkillDetailDrawer } from './skills/SkillDetailDrawer';
+import { SkillItem, SKILLS_DATA } from '../data/skills';
+import { TechLogoConstellation } from './skills/TechLogoConstellation';
+import { SkillsPlanetBackground } from './skills/SkillsPlanetBackground';
+import { SkillsMarquee } from './skills/SkillsMarquee';
 
 interface SkillsSectionProps {
   onSelectProject?: (projectId: string) => void;
 }
 
+/**
+ * SkillsSection
+ * 
+ * Space-portfolio cosmic atmosphere with full bidirectional linkage:
+ * 1. Signature cosmic purple planet rotating in full ambient view (/videos/skills-bg.webm)
+ * 2. Elegant minimalist header:
+ *    - "✧ Crafting with modern technologies" floating badge
+ *    - "Skills & Technologies" clean title
+ *    - "Making digital experiences with modern technology." subtitle
+ * 3. 5-row constellation of frameless, floating official brand logos (50 items total, 10 per row)
+ * 4. Micro-telemetry floating HUD for active/hovered skill
+ * 5. Subtle dual-track kinetic marquee at the base, 100% linked in real-time with the constellation!
+ */
 export const SkillsSection: React.FC<SkillsSectionProps> = ({ onSelectProject }) => {
-  const [selectedSkill, setSelectedSkill] = useState<SkillItem | null>(null);
-  const [hoveredSkillId, setHoveredSkillId] = useState<string | null>(null);
+  // Default selected skill (React or TypeScript)
+  const [selectedSkill, setSelectedSkill] = useState<SkillItem>(
+    SKILLS_DATA.find((s) => s.id === 'react') || SKILLS_DATA[0]
+  );
 
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center justify-center w-full min-h-screen pt-4 sm:pt-8 md:pt-12 pb-24 sm:pb-32 md:pb-36 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden text-white z-10 bg-transparent"
-      aria-label="Skills and Technology Constellation"
+      className="relative flex flex-col items-center justify-center w-full pt-4 sm:pt-8 pb-16 sm:pb-24 text-white z-10 bg-transparent overflow-hidden"
+      aria-label="Skills & Technologies"
     >
-      {/* 
-        WORK → SKILLS SPATIAL ATMOSPHERIC BRIDGE
-        Extremely soft, wide purple/blue radial glow positioned between Work and Skills.
-        Eliminates vertical dead space, letting the star field continue naturally
-        while the purple atmosphere gently emerges before the Skills heading.
-      */}
-      <div
-        className="absolute -top-20 sm:-top-28 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[340px] pointer-events-none -z-10"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(112, 66, 248, 0.08) 0%, rgba(79, 70, 229, 0.02) 45%, transparent 75%)',
-          filter: 'blur(90px)',
-        }}
-        aria-hidden="true"
-      />
+      {/* ─── 1. SIGNATURE PURPLE COSMIC PLANET BACKGROUND ─── */}
+      <SkillsPlanetBackground activeBrandColor={selectedSkill.brandColor} />
 
-      {/* 
-        LAYER 2: Central Purple Nebula Video Background
-        Centered, looping, muted, playsInline, autoPlay at ~0.35 opacity.
-        Feathered vertically using CSS mask-image so top and bottom edges dissolve
-        naturally into the deep space background without any rectangular boundaries.
-      */}
-      <div
-        className="absolute inset-0 w-full h-full pointer-events-none -z-10 flex items-center justify-center overflow-hidden"
-        style={{
-          maskImage:
-            'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 12%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.7) 88%, transparent 100%)',
-          WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 12%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.7) 88%, transparent 100%)',
-        }}
-      >
-        <video
-          className="w-full h-auto min-h-full min-w-full object-cover opacity-35 pointer-events-none select-none"
-          preload="auto"
-          playsInline
-          loop
-          muted
-          autoPlay
-          src="/videos/skills-bg.webm"
+      {/* ─── 2. MAIN STRUCTURAL CONTENT CONTAINER ─── */}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center relative z-10">
+        {/* Header */}
+        <div className="w-full text-center flex flex-col items-center mb-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-[#030014]/70 backdrop-blur-md text-xs text-purple-200 shadow-[0_0_20px_rgba(112,66,248,0.25)] mb-2.5">
+            <span className="text-purple-400 text-sm">✧</span>
+            <span className="font-medium tracking-wide">Crafting with modern technologies</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal tracking-tight text-white font-sans mb-2.5">
+            Skills & Technologies
+          </h2>
+
+          <p className="text-xs sm:text-sm text-neutral-400 font-light max-w-xl text-center">
+            Making digital experiences with modern technology.
+          </p>
+        </div>
+
+        {/* ─── 3. THE 5-ROW CONSTELLATION (50 SKILLS, 10 PER ROW) ─── */}
+        <div className="w-full relative">
+          <TechLogoConstellation
+            activeSkillId={selectedSkill.id}
+            onSelectSkill={(skill) => setSelectedSkill(skill)}
+          />
+        </div>
+
+        {/* ─── 4. BOTTOM AMBIENT STATUS PILL ─── */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-neutral-400 font-mono">
+          <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+            STACK DEPLOYED // 50 NODES (5×10)
+          </span>
+          <span
+            className="px-3 py-1 rounded-full border backdrop-blur-sm transition-colors duration-300"
+            style={{
+              backgroundColor: `${selectedSkill.brandColor}15`,
+              borderColor: `${selectedSkill.brandColor}35`,
+              color: selectedSkill.brandColor,
+            }}
+          >
+            ACTIVE TARGET: {selectedSkill.name.toUpperCase()}
+          </span>
+          <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm hidden sm:inline">
+            ZERO RUNTIME ARTIFACTS
+          </span>
+        </div>
+      </div>
+
+      {/* ─── 5. DUAL-TRACK MARQUEE (100% BIDIRECTIONAL LINKED TO CONSTELLATION) ─── */}
+      <div className="w-full mt-10 sm:mt-14 opacity-80 hover:opacity-100 transition-opacity duration-300">
+        <SkillsMarquee
+          activeSkillId={selectedSkill.id}
+          onSelectSkill={(skill) => setSelectedSkill(skill)}
         />
       </div>
-
-      {/* Controlled Purple Spatial Atmosphere Core Glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1100px] h-[75vh] max-h-[750px] rounded-full pointer-events-none -z-10"
-        style={{
-          background:
-            'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(112, 66, 248, 0.14) 0%, rgba(147, 51, 234, 0.04) 50%, transparent 75%)',
-          filter: 'blur(90px)',
-        }}
-        aria-hidden="true"
-      />
-
-      {/* CENTERED TYPOGRAPHY (Space-Portfolio inspired SkillText) */}
-      <SkillText />
-
-      {/* 
-        ORGANIC MULTI-ROW TECHNOLOGY CONSTELLATION
-        Floating technology logos without cards, rectangular containers, borders, or badges.
-        6 loose horizontal rows with generous organic spacing.
-      */}
-      <div className="w-full max-w-6xl mx-auto flex flex-col items-center gap-10 sm:gap-14 md:gap-16 z-10">
-        {SKILL_ROWS.map((rowDef) => {
-          const rowSkills = SKILLS_BY_ROW[rowDef.row] || [];
-          return (
-            <div
-              key={rowDef.row}
-              className="w-full flex flex-col items-center"
-              onMouseLeave={() => setHoveredSkillId(null)}
-            >
-              {/* Row Technology Constellation */}
-              <div className="flex flex-row justify-center items-center flex-wrap gap-7 sm:gap-9 md:gap-11 lg:gap-14">
-                {rowSkills.map((skill, index) => {
-                  const isSelected = selectedSkill?.id === skill.id;
-                  const isDimmed = selectedSkill !== null
-                    ? !isSelected
-                    : hoveredSkillId !== null && hoveredSkillId !== skill.id;
-
-                  return (
-                    <div
-                      key={skill.id}
-                      onMouseEnter={() => setHoveredSkillId(skill.id)}
-                    >
-                      <SkillFloatingItem
-                        skill={skill}
-                        index={index}
-                        onSelect={(selected) => {
-                          setSelectedSkill(selected);
-                        }}
-                        isSelected={isSelected}
-                        isDimmed={isDimmed}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Right-Side Slide-Over / Floating HUD Profile Drawer */}
-      <SkillDetailDrawer
-        skill={selectedSkill}
-        onClose={() => setSelectedSkill(null)}
-        onSelectProject={onSelectProject}
-      />
     </section>
   );
 };
+

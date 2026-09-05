@@ -210,7 +210,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
     <div
       id="work"
       ref={containerRef}
-      className="relative w-screen min-h-[90vh] mt-[20vh] mb-6 sm:mb-8 md:mb-10 overflow-hidden select-none"
+      className="relative w-screen min-h-[58vh] sm:min-h-[64vh] mt-[8vh] sm:mt-[10vh] mb-0 pb-4 overflow-hidden select-none"
     >
       {/* Main slider draggable area */}
       <div
@@ -223,7 +223,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
         <div className="w-full h-full overflow-hidden">
           <ul
             ref={listRef}
-            className={`list-none flex flex-row items-center h-[75vh] min-w-min pl-[14vw] pr-[20vw] m-0 transition-opacity duration-500 will-change-transform ${
+            className={`list-none flex flex-row items-center h-[52vh] sm:h-[56vh] min-w-min pl-[14vw] pr-[20vw] m-0 transition-opacity duration-500 will-change-transform ${
               isDragging ? 'is-dragging work-list-hold' : ''
             }`}
           >
@@ -394,6 +394,37 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ─── TRANSITION BRIDGE TO SKILLS SECTION ─── */}
+        {currentActive === -1 && (
+          <div className="w-full flex items-center justify-between px-[7vw] pt-2 pb-1 text-xs font-mono text-neutral-400 select-none">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+              <span className="tracking-wider uppercase text-[11px] text-neutral-400">
+                01-04 ARCHIVES // DRAG HORIZONTALLY
+              </span>
+            </div>
+
+            <a
+              href="#skills"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('skills');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="group inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] hover:bg-purple-500/15 border border-white/10 hover:border-purple-500/30 text-neutral-300 hover:text-white transition-all"
+            >
+              <span className="tracking-widest uppercase text-[10px]">
+                50+ SKILLS & TECHNOLOGIES
+              </span>
+              <span className="text-purple-400 group-hover:translate-y-0.5 transition-transform text-xs">
+                ↓
+              </span>
+            </a>
           </div>
         )}
       </div>

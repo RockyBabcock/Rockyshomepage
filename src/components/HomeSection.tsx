@@ -101,6 +101,18 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ scrollY }) => {
       ref={sectionRef}
       className="relative w-screen h-screen px-[7vw] pt-[23vh] pb-[12vh] box-border overflow-hidden"
     >
+      {/* Space Portfolio Signature Purple Blackhole Ambient Light (/videos/blackhole.webm) */}
+      <div className="rotate-180 absolute -top-[240px] sm:-top-[340px] left-0 w-full h-[110vh] sm:h-[125vh] -z-10 pointer-events-none opacity-55 sm:opacity-70 mix-blend-screen overflow-hidden select-none">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover select-none"
+          src="/videos/blackhole.webm"
+        />
+      </div>
+
       <div className="relative h-full w-full z-10">
         <div className="flex flex-row justify-between items-center w-[95%] h-full relative box-border max-[1250px]:justify-center max-[1250px]:w-full">
           {/* Left Column: Signature (desktop only) */}
